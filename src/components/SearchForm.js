@@ -66,16 +66,19 @@ const SearchForm = ({ suggestions }) => {
 	}
 
 	function handleKeyDown(e) {
-		let currentQuery;
+		let currentQuery = '';
 
 		// User pressed Enter or Return
 		if (e.keyCode === 13) {
+			if (e.target.value.length === 0) return;
 			currentQuery = filteredSuggestions[activeSuggestion];
-			setInputVal(currentQuery);
-			setQuery(currentQuery);
-			setActiveSuggestion(0);
-			setShowSuggestions(false);
-			saveQuery(currentQuery);
+			if (currentQuery) {
+				setInputVal(currentQuery);
+				setQuery(currentQuery);
+				setActiveSuggestion(0);
+				setShowSuggestions(false);
+				saveQuery(currentQuery);
+			}
 		}
 
 		// User pressed the up arrow
