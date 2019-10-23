@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Suggestions from './Suggestions';
 import './SearchForm.css';
 import SavedQueries from './SavedQueries';
-import { DOG_BREED_URL } from '../constants';
+import { useFetchDogHook } from '../utils/hooks';
 
 const SearchForm = ({ suggestions }) => {
 	const [inputVal, setInputVal] = useState('');
@@ -13,9 +13,9 @@ const SearchForm = ({ suggestions }) => {
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [filteredSuggestions, setFilteredSuggestions] = useState([]);
 	const [savedQueries, setSavedQueries] = useState([]);
-	const [randomDogImage, setRandomDogImage] = useState(null);
-	const [dogFetchError, setDogFetchError] = useState(null);
-	const [isLoading, setLoading] = useState(false);
+
+
+	const { randomDogImage, dogFetchError, isLoading } = useFetchDogHook(query.toLowerCase());
 
 	/**
 	 * Takes a query string and saves it
@@ -114,11 +114,10 @@ const SearchForm = ({ suggestions }) => {
 
 		let filteredSavedQueries = queries.filter(query => query !== queryToDelete);
 
-		setRandomDogImage(null);
-		setDogFetchError(null);
+		// setRandomDogImage(null);
+		// setDogFetchError(null);
 		setSavedQueries(filteredSavedQueries);
 	}
-
 
 
 	/**
@@ -127,8 +126,8 @@ const SearchForm = ({ suggestions }) => {
 
 	function clearSearchHistory() {
 		setSavedQueries([]);
-		setRandomDogImage(null);
-		setDogFetchError(null);
+		// setRandomDogImage(null);
+		// setDogFetchError(null);
 	}
 
 	/**
@@ -138,31 +137,6 @@ const SearchForm = ({ suggestions }) => {
 	 * @returns {null} 
 	*/
 
-
-	function fetchDog(breed) {
-		setLoading(true);
-		return fetch(`${DOG_BREED_URL}/${breed}/images/random`)
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				if (data.status === 'success') {
-					setLoading(false);
-					setInputVal('');
-					setRandomDogImage(data.message);
-					setDogFetchError(null);
-				} else {
-					setLoading(false);
-					setRandomDogImage(null);
-					setDogFetchError('🐶 Woof, either the suggestions haven\'t loaded, or that dog ran away :( ');
-				}
-			});
-	}
-
-	useEffect(() => {
-		if (query.length === 0) return;
-		fetchDog(query.toLowerCase());
-	}, [query]);
 
 	return (
 		<div className="Search">
