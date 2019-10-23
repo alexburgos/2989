@@ -9,7 +9,7 @@ export const useFetchBreedsHook = () => {
 	useEffect(() => {
 		setError(null);
 
-		fetch(DOG_BREEDS_URL)
+		fetch(`${DOG_BREEDS_URL}/breeds/list/all`)
 			.then(response => {
 				return response.json();
 			})
@@ -24,9 +24,9 @@ export const useFetchBreedsHook = () => {
 				}
 			})
 			.catch(err => {
-        console.error(err);
-        setError(err);
-      });
+				console.error(err);
+				setError(err);
+			});
   }, []);
   
 	return { suggestions, error };
@@ -42,7 +42,11 @@ export const useFetchDogHook = (breed) => {
 		setDogFetchError(null);
 		setLoading(true);
 
-		fetch(`${DOG_BREED_URL}/${breed}/images/random`)
+		fetch(
+			breed.length > 0
+				? `${DOG_BREED_URL}/breed/${breed.toLowerCase()}/images/random`
+				: `${DOG_BREED_URL}/breeds/image/random`
+		)
 			.then(response => {
 				return response.json();
 			})

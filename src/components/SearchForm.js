@@ -15,7 +15,7 @@ const SearchForm = ({ suggestions }) => {
 	const [savedQueries, setSavedQueries] = useState([]);
 
 
-	const { randomDogImage, dogFetchError, isLoading } = useFetchDogHook(query.toLowerCase());
+	const { randomDogImage, dogFetchError, isLoading } = useFetchDogHook(query);
 
 	/**
 	 * Takes a query string and saves it
